@@ -22,7 +22,8 @@ class RequestHandler extends Actor {
           println("Received message from " + client.getInetAddress() + ":" + client.getPort())
           //Считываем заголовки запроса
           var is:InputStream = client.getInputStream()
-          var buffer:BufferedReader = new BufferedReader(is)
+
+          var buffer:BufferedReader = new BufferedReader(new InputStreamReader(is))
           println("First header Line: " + buffer.readLine())
         }
         case _ => println("Request error, discarded!")
@@ -47,12 +48,9 @@ class HttpServer(port: Int, address: InetAddress) extends Actor {
 }
 
 
-object Server {
-  def main(args: Array[String]) {
-    var address:InetAddress = InetAddress.getByName("127.0.0.1")
+object Server extends App {
+  var address:InetAddress = InetAddress.getByName("127.0.0.1")
 
-    var server:HttpServer = new HttpServer(1234, address)
-    server.start()
-
-  }
+  var server:HttpServer = new HttpServer(1234, address)
+  server.start()
 }
